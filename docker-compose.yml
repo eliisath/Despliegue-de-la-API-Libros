@@ -2,20 +2,20 @@ version: "3"
 services:
   # Servicio de la API
   api:
-    build: . #-Ubicación del Dockerfile (actualmente en el mismo directorio)
+    build: . # Ubicación del Dockerfile (actualmente en el mismo directorio)
     ports:
       - "3000:3000" # Mapeo del puerto del contenedor al puerto del host
     depends_on:
       - mongodb # Indicamos que depende del servicio 'mongodb'
     healthcheck:
-      test: "curl - http://127.0.0.1:3000/ || exit 1"
+      test: "curl -f http://localhost:3000/ || exit 1"
       interval: 10s
       timeout: 5s
       start_period: 60s
     environment:
-      MONGO_URL: mongodb://127.0.0.1/biblioteca
-      OAUTH_AUDIENCE: https://localhost:3000/api/libros
-      DAUTH_URL: https://dev-lkfqum3zbxve2law.us.auth0.com
+      MONGO_URL: "mongodb://127.0.0.1/biblioteca"
+      OAUTH_AUDIENCE: "https://localhost:3000/api/libros"
+      OAUTH_URL: "https://dev-lkfqum3zbxve2law.us.auth0.com"
   # Servicio de MongoDB
   mongodb:
     image: mongo:latest # Utilizamos la imagen oficial de MongoDB desde Docker Hub
@@ -31,4 +31,4 @@ services:
       - mongo_data:/data/db # Mapeo de volumen para persistir los datos
 
 volumes:
-  mongo_data: # Definimos el volumen para MongoD8
+  mongo_data: # Definimos el volumen para MongoDB

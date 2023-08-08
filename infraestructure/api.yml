@@ -12,7 +12,7 @@ Resources:
         - FARGATE
       ExecutionRoleArn: "arn:aws:iam::280761544627:role/LabRole"
       ContainerDefinitions:
-        - Name: libros
+        - Name: api libros
           Image: "280761544627.dkr.ecr.us-east-1.amazonaws.com/libros:latest"
           Cpu: 512
           Memory: 1024
@@ -30,7 +30,7 @@ Resources:
               Condition: HEALTHY
           Essential: true
           HealthCheck:
-            Command: ["CMD-SHELL", "curl -f http://127.0.0.1:3000/ || exit 1"]
+            Command: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
             Interval: 30 # Intervalo entre comprobaciones de salud en segundos
             Timeout: 5 # Tiempo máximo en segundos permitido para una comprobación de salud
             Retries: 3 # Número de veces que se realizará la comprobación antes de declarar el contenedor como no saludable
@@ -63,7 +63,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: "/db/"
+              awslogs-group: "/db/api-libros"
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: "db"
   Service:
@@ -87,7 +87,7 @@ Resources:
           SecurityGroups:
             - !ImportValue ContainerSecurityGroup
       LoadBalancers:
-        - ContainerName: libros
+        - ContainerName: api-libros
           ContainerPort: 3000
           TargetGroupArn: !Ref TargetGroup
 
@@ -127,12 +127,12 @@ Resources:
   TaskLogGroupMongoDB:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: "/db/" # Nombre del log group, se puede personalizar según tu preferencia
+      LogGroupName: "/db/api-libros" # Nombre del log group, se puede personalizar según tu preferencia
       RetentionInDays: 7 # Cantidad de días que se retendrán los registros en el log group. Puedes ajustar esta cantidad según tus necesidades.
 
 Outputs:
   ApiEndpoint:
-    Description: libros API Endpoint
+    Description: Libros API Endpoint
     Value: !Join ["", ["http://", !ImportValue DomainName]]
     Export:
-      Name: "librosApiEndpoint"
+      Name: "LibrosApiEndpoint"
