@@ -13,7 +13,7 @@ Resources:
       ExecutionRoleArn: "arn:aws:iam::280761544627:role/LabRole"
       ContainerDefinitions:
         - Name: api libros
-          Image: "280761544627.dkr.ecr.us-east-1.amazonaws.com/libros:latest"
+          Image: "280761544627.dkr.ecr.us-east-1.amazonaws.com/api-libros:latest"
           Cpu: 512
           Memory: 1024
           PortMappings:
